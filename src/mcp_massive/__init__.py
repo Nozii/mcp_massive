@@ -80,16 +80,15 @@ def main() -> None:
 
     from .server import configure_credentials, mass_mcp
 
-from .server import configure_credentials, mass_mcp
+# Defer importing server until after env vars are read
+    from .server import configure_credentials, mass_mcp
 
-from .server import run, configure_credentials
+    configure_credentials(
+        massive_api_key,
+        base_url,
+        llms_txt_url=llms_txt_url,
+        max_tables=max_tables,
+        max_rows=max_rows,
+    )
 
-configure_credentials(
-    massive_api_key,
-    base_url,
-    llms_txt_url=llms_txt_url,
-    max_tables=max_tables,
-    max_rows=max_rows,
-)
-
-run(transport=transport)
+    mass_mcp.run(transport="streamable-http")
