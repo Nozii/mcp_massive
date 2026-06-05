@@ -76,21 +76,33 @@ def main() -> None:
 
     # Defer importing server until after env vars are read
     from .server import configure_credentials, mass_mcp
-    import uvicorn
+import uvicorn
+from starlette.applications import Starlette
+from starlette.responses import PlainTextResponse
+from starlette.routing import Route, Mount
 
-    configure_credentials(
-        massive_api_key,
-        base_url,
-        llms_txt_url=llms_txt_url,
-        max_tables=max_tables,
-        max_rows=max_rows,
-    )
+configure_credentials(
+    massive_api_key,
+    base_url,
+    llms_txt_url=llms_txt_url,
+    max_tables=max_tables,
+    max_rows=max_rows,
+)
 
-    app = mass_mcp.streamable_http_app()
-    print(app.routes, file=sys.stderr)
+mcp_app = mass_mcp.streamable_http_app()
 
-    uvicorn.run(
-        app,
-        host="0.0.0.0",
-        port=int(os.environ.get("PORT", 8000)),
-    )
+async def health(request):
+    return PlainTextResponse("ok")
+
+app = Starlette(
+    routes=[
+        Route("/", health),
+        Mount("/mcp", mcp_app),
+    ]
+)
+
+uvicorn.run(
+    app,
+    host="0.0.0.0",
+    port=int(os.environ.get("PORT", 8000)),
+)
