@@ -103,6 +103,8 @@ def main() -> None:
             Mount("/mcp", app=mcp_app),
         ]
     )
+    
+    print(app.routes, file=sys.stderr)
 
     uvicorn.run(
         app,
