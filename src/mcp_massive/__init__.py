@@ -82,13 +82,20 @@ def main() -> None:
 
 # Defer importing server until after env vars are read
     from .server import configure_credentials, mass_mcp
+import uvicorn
 
-    configure_credentials(
-        massive_api_key,
-        base_url,
-        llms_txt_url=llms_txt_url,
-        max_tables=max_tables,
-        max_rows=max_rows,
-    )
+configure_credentials(
+    massive_api_key,
+    base_url,
+    llms_txt_url=llms_txt_url,
+    max_tables=max_tables,
+    max_rows=max_rows,
+)
 
-    mass_mcp.run(transport="streamable-http")
+app = mass_mcp.streamable_http_app()
+
+uvicorn.run(
+    app,
+    host="0.0.0.0",
+    port=int(os.environ.get("PORT", 8000)),
+)
