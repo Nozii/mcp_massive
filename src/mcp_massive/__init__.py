@@ -86,10 +86,26 @@ def main() -> None:
         max_rows=max_rows,
     )
 
-    app = mass_mcp.streamable_http_app()
+    from starlette.applications import Starlette
+from starlette.responses import JSONResponse
+from starlette.routing import Mount, Route
+import uvicorn
 
-    uvicorn.run(
-        app,
-        host="0.0.0.0",
-        port=int(os.environ.get("PORT", 8000)),
-    )
+mcp_app = mass_mcp.streamable_http_app()
+
+async def health(request):
+    return JSONResponse({"status": "ok"})
+
+app = Starlette(
+    routes=[
+        Route("/", health),
+        Route("/health", health),
+        Mount("/mcp", app=mcp_app),
+    ]
+)
+
+uvicorn.run(
+    app,
+    host="0.0.0.0",
+    port=int(os.environ.get("PORT", 8000)),
+)
