@@ -91,10 +91,6 @@ def main() -> None:
     from starlette.routing import Mount, Route
     import uvicorn
 
-import inspect
-import sys
-from mcp.server.fastmcp import FastMCP
-
 mcp_app = mass_mcp.streamable_http_app()
 
     async def health(request):
