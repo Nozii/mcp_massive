@@ -78,15 +78,17 @@ def main() -> None:
     # loading numpy and other heavy deps.
     from .server import run, configure_credentials
 
-    configure_credentials(
-        massive_api_key,
-        base_url,
-        llms_txt_url=llms_txt_url,
-        max_tables=max_tables,
-        max_rows=max_rows,
-    )
+    from .server import configure_credentials, mass_mcp
 
-    from .server import mass_mcp
+from .server import configure_credentials, mass_mcp
+
+configure_credentials(
+    massive_api_key,
+    base_url,
+    llms_txt_url=llms_txt_url,
+    max_tables=max_tables,
+    max_rows=max_rows,
+)
 
 mass_mcp.run(
     transport="streamable-http",
