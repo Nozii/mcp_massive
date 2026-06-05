@@ -1,5 +1,3 @@
-import inspect
-print(inspect.signature(mass_mcp.run))
 import atexit
 import json
 import logging
