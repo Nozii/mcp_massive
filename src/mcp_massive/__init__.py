@@ -87,6 +87,7 @@ def main() -> None:
     )
 
     app = mass_mcp.streamable_http_app()
+    print(app.routes, file=sys.stderr)
 
     uvicorn.run(
         app,
