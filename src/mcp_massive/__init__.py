@@ -99,21 +99,21 @@ print(
     inspect.getsource(FastMCP.streamable_http_app),
     file=sys.stderr,
 )
-    
-    mcp_app = mass_mcp.streamable_http_app()
 
-    print("MCP ROUTES:", mcp_app.routes, file=sys.stderr)
+mcp_app = mass_mcp.streamable_http_app()
 
-    async def health(request):
-        return JSONResponse({"status": "ok"})
+print("MCP ROUTES:", mcp_app.routes, file=sys.stderr)
 
-    app = Starlette(
-        routes=[
-            Route("/", health),
-            Route("/health", health),
-            Mount("/mcp", app=mcp_app),
-        ]
-    )
+async def health(request):
+    return JSONResponse({"status": "ok"})
+
+app = Starlette(
+    routes=[
+        Route("/", health),
+        Route("/health", health),
+        Mount("/mcp", app=mcp_app),
+    ]
+)
     
     print(app.routes, file=sys.stderr)
 
