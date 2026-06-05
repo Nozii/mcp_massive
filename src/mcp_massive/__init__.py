@@ -86,4 +86,10 @@ def main() -> None:
         max_rows=max_rows,
     )
 
-    run(transport=transport)
+    from .server import mass_mcp
+
+mass_mcp.run(
+    transport="streamable-http",
+    host="0.0.0.0",
+    port=int(os.environ.get("PORT", 8000))
+)
