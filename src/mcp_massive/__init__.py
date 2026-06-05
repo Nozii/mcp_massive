@@ -93,6 +93,8 @@ def main() -> None:
 
     mcp_app = mass_mcp.streamable_http_app()
 
+    print("MCP ROUTES:", mcp_app.routes, file=sys.stderr)
+
     async def health(request):
         return JSONResponse({"status": "ok"})
 
