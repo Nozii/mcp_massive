@@ -90,8 +90,8 @@ def main() -> None:
     from starlette.responses import JSONResponse
     from starlette.routing import Mount, Route
     import uvicorn
-
-mcp_app = mass_mcp.streamable_http_app()
+    
+     mcp_app = mass_mcp.streamable_http_app()
 
     async def health(request):
         return JSONResponse({"status": "ok"})
