@@ -82,6 +82,8 @@ def main() -> None:
 
 from .server import configure_credentials, mass_mcp
 
+from .server import run, configure_credentials
+
 configure_credentials(
     massive_api_key,
     base_url,
@@ -90,8 +92,4 @@ configure_credentials(
     max_rows=max_rows,
 )
 
-mass_mcp.run(
-    transport="streamable-http",
-    host="0.0.0.0",
-    port=int(os.environ.get("PORT", 8000))
-)
+run(transport=transport)
