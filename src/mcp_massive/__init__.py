@@ -95,11 +95,6 @@ import inspect
 import sys
 from mcp.server.fastmcp import FastMCP
 
-print(
-    inspect.getsource(FastMCP.streamable_http_app),
-    file=sys.stderr,
-)
-
 mcp_app = mass_mcp.streamable_http_app()
 
 print("MCP ROUTES:", mcp_app.routes, file=sys.stderr)
