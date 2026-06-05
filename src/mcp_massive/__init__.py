@@ -89,6 +89,7 @@ def main() -> None:
     from starlette.applications import Starlette
     from starlette.responses import JSONResponse
     from starlette.routing import Mount, Route
+    import uvicorn
 
     mcp_app = mass_mcp.streamable_http_app()
 
@@ -103,12 +104,8 @@ def main() -> None:
         ]
     )
 
-print("ABOUT TO START UVICORN", file=sys.stderr)
-    
     uvicorn.run(
         app,
         host="0.0.0.0",
         port=int(os.environ.get("PORT", 8000)),
     )
-
-print("UVICORN EXITED", file=sys.stderr)
