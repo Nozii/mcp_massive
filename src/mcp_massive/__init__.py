@@ -74,28 +74,22 @@ def main() -> None:
     if os.environ.get("MASSIVE_MAX_ROWS"):
         max_rows = int(os.environ["MASSIVE_MAX_ROWS"])
 
-    # Defer importing server until after env vars are read — this triggers
-    # loading numpy and other heavy deps.
-    from .server import run, configure_credentials
-
+    # Defer importing server until after env vars are read
     from .server import configure_credentials, mass_mcp
+    import uvicorn
 
-# Defer importing server until after env vars are read
-    from .server import configure_credentials, mass_mcp
-import uvicorn
+    configure_credentials(
+        massive_api_key,
+        base_url,
+        llms_txt_url=llms_txt_url,
+        max_tables=max_tables,
+        max_rows=max_rows,
+    )
 
-configure_credentials(
-    massive_api_key,
-    base_url,
-    llms_txt_url=llms_txt_url,
-    max_tables=max_tables,
-    max_rows=max_rows,
-)
+    app = mass_mcp.streamable_http_app()
 
-app = mass_mcp.streamable_http_app()
-
-uvicorn.run(
-    app,
-    host="0.0.0.0",
-    port=int(os.environ.get("PORT", 8000)),
-)
+    uvicorn.run(
+        app,
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 8000)),
+    )
