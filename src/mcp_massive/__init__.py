@@ -168,11 +168,26 @@ def run(
     import os
     import uvicorn
 
+    from starlette.applications import Starlette
+    from starlette.responses import JSONResponse
+    from starlette.routing import Mount, Route
+
     if transport == "stdio":
         mass_mcp.run("stdio")
         return
 
-    app = mass_mcp.streamable_http_app()
+    mcp_app = mass_mcp.streamable_http_app()
+
+    async def health(request):
+        return JSONResponse({"status": "ok"})
+
+    app = Starlette(
+        routes=[
+            Route("/", health),
+            Route("/health", health),
+            Mount("/mcp", app=mcp_app),
+        ]
+    )
 
     port = int(os.environ.get("PORT", 8000))
 
