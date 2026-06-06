@@ -162,9 +162,30 @@ async def query_data(sql: str) -> str:
 # Run function for Railway
 # ============================
 
-def run(transport: Literal["stdio", "sse", "streamable-http"] = "streamable-http") -> None:
-    """Run the MCP server."""
-    mass_mcp.run(transport)
+def run(
+    transport: Literal["stdio", "sse", "streamable-http"] = "streamable-http",
+) -> None:
+    import os
+    import uvicorn
+
+    if transport == "stdio":
+        mass_mcp.run("stdio")
+        return
+
+    app = mass_mcp.streamable_http_app()
+
+    port = int(os.environ.get("PORT", 8000))
+
+    print(
+        f"Starting MCP HTTP server on 0.0.0.0:{port}",
+        flush=True,
+    )
+
+    uvicorn.run(
+        app,
+        host="0.0.0.0",
+        port=port,
+    )
 
 import os
 from dotenv import load_dotenv
@@ -192,9 +213,4 @@ def main():
         ),
     )
     
-    run(
-        os.environ.get(
-            "MCP_TRANSPORT",
-            "streamable-http",
-        )
-    )
+    run("streamable-http")
