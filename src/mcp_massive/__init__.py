@@ -231,3 +231,6 @@ def main():
     )
     
     run("streamable-http")
+
+    if __name__ == "__main__":
+    main()
