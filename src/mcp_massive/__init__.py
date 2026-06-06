@@ -165,3 +165,36 @@ async def query_data(sql: str) -> str:
 def run(transport: Literal["stdio", "sse", "streamable-http"] = "streamable-http") -> None:
     """Run the MCP server."""
     mass_mcp.run(transport)
+
+import os
+from dotenv import load_dotenv
+
+
+def main():
+    load_dotenv()
+
+    configure_credentials(
+        api_key=os.environ.get("MASSIVE_API_KEY", ""),
+        base_url=os.environ.get(
+            "MASSIVE_API_BASE_URL",
+            "https://api.massive.com",
+        ).rstrip("/"),
+        llms_txt_url=os.environ.get("MASSIVE_LLMS_TXT_URL"),
+        max_tables=(
+            int(os.environ["MASSIVE_MAX_TABLES"])
+            if os.environ.get("MASSIVE_MAX_TABLES")
+            else None
+        ),
+        max_rows=(
+            int(os.environ["MASSIVE_MAX_ROWS"])
+            if os.environ.get("MASSIVE_MAX_ROWS")
+            else None
+        ),
+    )
+
+    run(
+        os.environ.get(
+            "MCP_TRANSPORT",
+            "streamable-http",
+        )
+    )
