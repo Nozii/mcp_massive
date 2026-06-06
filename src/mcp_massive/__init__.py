@@ -89,11 +89,7 @@ def main() -> None:
     from starlette.applications import Starlette
     from starlette.responses import JSONResponse
     from starlette.routing import Mount, Route
-    import uvicorn
 
-    from importlib.metadata import version
-    print("MCP VERSION:", version("mcp"), file=sys.stderr)
-    
     mcp_app = mass_mcp.streamable_http_app()
 
     async def health(request):
@@ -106,11 +102,13 @@ def main() -> None:
             Mount("/mcp", app=mcp_app),
         ]
     )
+
     uvicorn.run(
         app,
         host="0.0.0.0",
         port=int(os.environ.get("PORT", 8000)),
     )
+
 
 if __name__ == "__main__":
     main()
