@@ -92,7 +92,7 @@ def main() -> None:
     import uvicorn
 
     from importlib.metadata import version
-        print("MCP VERSION:", version("mcp"), file=sys.stderr)
+    print("MCP VERSION:", version("mcp"), file=sys.stderr)
     
     mcp_app = mass_mcp.streamable_http_app()
 
