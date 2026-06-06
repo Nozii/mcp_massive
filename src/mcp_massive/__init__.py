@@ -192,6 +192,15 @@ def main():
         ),
     )
 
+import inspect
+import sys
+from mcp.server.fastmcp import FastMCP
+
+print(
+    inspect.getsource(FastMCP.run),
+    file=sys.stderr,
+)
+    
     run(
         os.environ.get(
             "MCP_TRANSPORT",
