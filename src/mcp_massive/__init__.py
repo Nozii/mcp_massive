@@ -185,7 +185,9 @@ def run(
         routes=[
             Route("/", health),
             Route("/health", health),
-            Mount("/mcp", app=mcp_app),
+
+            # mount MCP at root
+            Mount("/", app=mcp_app),
         ]
     )
 
