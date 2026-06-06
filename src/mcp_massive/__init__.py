@@ -91,6 +91,9 @@ def main() -> None:
     from starlette.routing import Mount, Route
     import uvicorn
 
+    from importlib.metadata import version
+        print("MCP VERSION:", version("mcp"), file=sys.stderr)
+    
     mcp_app = mass_mcp.streamable_http_app()
 
     async def health(request):
